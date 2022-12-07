@@ -17,6 +17,6 @@ public:
         {
             return 0;
         }
-        return ((root->val>=low && root->val<=high)?root->val:0)+rangeSumBST(root->left,low,high)+rangeSumBST(root->right,low,high);;
+        return ((root->val>=low && root->val<=high)?root->val:0)+rangeSumBST(root->left,low,high)+rangeSumBST(root->right,low,high);
     }
 };
