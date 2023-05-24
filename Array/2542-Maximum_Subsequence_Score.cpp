@@ -1,0 +1,28 @@
+class Solution {
+public:
+    long long maxScore(vector<int> &nums1,vector<int> &nums2,int k) 
+    {
+        long long ans=0,sum=0;
+        vector<pair<int,int>> p;
+        priority_queue<int> pq;
+        for(int i=0;i<nums1.size();i++)
+        {
+            p.push_back({nums2[i],nums1[i]});
+        }
+        sort(p.rbegin(),p.rend());
+        for(int i=0;i<k-1;i++)
+        {
+            sum+=p[i].second;
+            pq.push(-p[i].second);
+        }
+        for(int i=k-1;i<nums1.size();i++)
+        {
+            sum+=p[i].second;
+            pq.push(-p[i].second);
+            ans=max(ans,sum*p[i].first);
+            sum+=pq.top();
+            pq.pop();
+        }
+        return ans;
+    }
+};
