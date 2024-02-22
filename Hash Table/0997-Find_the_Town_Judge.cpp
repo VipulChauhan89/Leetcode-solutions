@@ -1,22 +1,18 @@
 class Solution {
 public:
-    int findJudge(int n, vector<vector<int>>& trust) 
+    int findJudge(int n,vector<vector<int>> &trust) 
     {
-        if(n==1 && trust.size()==0)
+        vector<int> f(n+1),s(n+1);
+        for(auto i:trust)
         {
-            return n;
+            s[i[0]]++;
+            f[i[1]]++;
         }
-        unordered_map<int,int> m;
-        for(auto &i:trust)
+        for(int i=1;i<=n;i++)
         {
-            m[i[0]]=-1;
-            m[i[1]]++;
-        }
-        for(auto i:m)
-        {
-            if(i.second==n-1)
+            if(f[i]==n-1 && s[i]==0)
             {
-                return i.first;
+                return i;
             }
         }
         return -1;
