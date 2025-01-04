@@ -1,28 +1,27 @@
 class Solution {
 public:
-    int countPalindromicSubsequence(string inputString) 
+    int countPalindromicSubsequence(string s) 
     {
-        vector<int> minExist(26,INT_MAX),maxExist(26,INT_MIN);
-        for(int i=0;i<inputString.size();i++) 
+        int n=s.length();
+        unordered_set<string> ans;
+        unordered_set<char> left;
+        unordered_map<char,int> right;
+        for(int i=0;i<n;i++)
         {
-            int charIndex=inputString[i]-'a';
-            minExist[charIndex]=min(minExist[charIndex],i);
-            maxExist[charIndex]=max(maxExist[charIndex],i);
+            right[s[i]]++;
         }
-        int uniqueCount=0;
-        for(int charIndex=0;charIndex<26;charIndex++) 
+        for(int i=0;i<n;i++)
         {
-            if(minExist[charIndex]==INT_MAX || maxExist[charIndex]==INT_MIN)
+            right[s[i]]--;
+            for(auto &j:left)
             {
-                continue;
+                if(right[j]>0)
+                {
+                    ans.insert(string(1,s[i])+j);
+                }
             }
-            unordered_set<char> uniqueCharsBetween;
-            for(int j=minExist[charIndex]+1;j<maxExist[charIndex];j++) 
-            {
-                uniqueCharsBetween.insert(inputString[j]);
-            }
-            uniqueCount+=uniqueCharsBetween.size();
+            left.insert(s[i]);
         }
-        return uniqueCount;
+        return ans.size();
     }
 };
