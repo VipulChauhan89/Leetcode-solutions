@@ -2,17 +2,12 @@ class Solution {
 public:
     int numIdenticalPairs(vector<int> &nums) 
     {
-        int count=0;
-        for(int i=0;i<nums.size();i++)
+        int ans=0;
+        unordered_map<int,int> m;
+        for(auto &i:nums)
         {
-            for(int j=i+1;j<nums.size();j++)
-            {
-                if(nums[i]==nums[j])
-                {
-                    count++;
-                }
-            }
+            ans+=m[i]++;
         }
-        return count;
+        return ans;
     }
 };
