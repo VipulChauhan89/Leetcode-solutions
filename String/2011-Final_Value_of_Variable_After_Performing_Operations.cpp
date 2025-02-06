@@ -1,27 +1,19 @@
 class Solution {
 public:
-    int finalValueAfterOperations(vector<string>& operations) 
+    int finalValueAfterOperations(vector<string> &operations) 
     {
-        int x=0;
-        for(auto s:operations)
+        int ans=0;
+        for(auto &i:operations)
         {
-            if(s=="--X")
+            if(i[1]=='+')
             {
-                --x;
-            }
-            else if(s=="++X")
-            {
-                ++x;
-            }
-            else if(s=="X--")
-            {
-                x--;
+                ans++;
             }
             else
             {
-                x++;
+                ans--;
             }
-        }
-        return x;
+        } 
+        return ans;
     }
 };
