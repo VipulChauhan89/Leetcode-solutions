@@ -1,44 +1,43 @@
 class Solution {
 public:
-    bool checkValidCuts(int n,vector<vector<int>> &rectangles) 
-    {
-        int sz=rectangles.size();
-        vector<pair<int,int>> x(sz),y(sz),mergedx,mergedy;
-        for(int i=0;i<sz;i++) 
+    bool checkValidCuts(int n,vector<vector<int>> &rectangles) {
+        vector<pair<int,int>> e;
+        for(auto &i:rectangles) 
         {
-            x[i]={rectangles[i][0],rectangles[i][2]};
-            y[i]={rectangles[i][1],rectangles[i][3]};
+            e.push_back({i[0],1});
+            e.push_back({i[2],-1});
         }
-        sort(x.begin(),x.end());
-        sort(y.begin(),y.end());
-        mergedx.push_back({x[0].first,x[0].second});
-        mergedy.push_back({y[0].first,y[0].second});
-        for(int i=1;i<sz;i++)
+        sort(e.begin(),e.end());
+        int active=0,sections=0;
+        for(auto &i:e) 
         {
-            if(mergedx.back().second>x[i].first)
+            active+=i.second;
+            if(active==0)
             {
-                pair<int,int> p=mergedx.back();
-                mergedx.pop_back();
-                mergedx.push_back({min(p.first,x[i].first),max(p.second,x[i].second)});
-            }
-            else
-            {
-                mergedx.push_back({x[i].first,x[i].second});
-            }
+                sections++;
+            } 
         }
-        for(int i=1;i<sz;i++)
+        if(sections>=3)
         {
-            if(mergedy.back().second>y[i].first)
-            {
-                pair<int,int> p=mergedy.back();
-                mergedy.pop_back();
-                mergedy.push_back({min(p.first,y[i].first),max(p.second,y[i].second)});
-            }
-            else
-            {
-                mergedy.push_back({y[i].first,y[i].second});
-            }
+            return true;
+        } 
+        e.clear();
+        for(auto &i:rectangles) 
+        {
+            e.push_back({i[1],1});
+            e.push_back({i[3],-1});
         }
-        return (mergedx.size()>=3 || mergedy.size()>=3); 
+        sort(e.begin(),e.end());
+        active=0;
+        sections=0;
+        for(auto &i:e) 
+        {
+            active+=i.second;
+            if(active==0)
+            {
+                sections++;
+            } 
+        }
+        return sections>=3;
     }
 };
