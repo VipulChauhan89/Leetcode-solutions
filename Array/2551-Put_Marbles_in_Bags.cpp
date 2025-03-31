@@ -2,23 +2,18 @@ class Solution {
 public:
     long long putMarbles(vector<int> &weights,int k) 
     {
-        int n=weights.size();
-        if(k==1 || n==k)
+        if(k==1)
         {
             return 0;
         }
-        vector<int> v;
-        for(int i=0;i<n-1;i++)
+        int n=weights.size();
+        vector<int> s;
+        for(int i=1;i<n;i++)
         {
-            v.push_back(weights[i]+weights[i+1]);
+            s.push_back(weights[i-1]+weights[i]);
         }
-        sort(v.begin(),v.end());
-        long long mn=0,mx=0;
-        for(int i=0;i<k-1;i++)
-        {
-            mn+=v[i];
-            mx+=v[n-2-i];
-        }
+        sort(s.begin(),s.end());
+        long long mn=accumulate(s.begin(),s.begin()+(k-1),0LL),mx=accumulate(s.end()-(k-1),s.end(),0LL);
         return mx-mn;
     }
 };
