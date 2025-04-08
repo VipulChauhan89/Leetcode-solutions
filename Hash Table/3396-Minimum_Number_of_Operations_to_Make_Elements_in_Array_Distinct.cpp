@@ -2,18 +2,25 @@ class Solution {
 public:
     int minimumOperations(vector<int> &nums) 
     {
-        int i=nums.size()-1;
-        unordered_set<int> s;
-        while(i>=0)
+        int count=0,temp=0;
+        while(true)
         {
-            if(s.find(nums[i])!=s.end())
+            unordered_map<int,int> m;
+            temp=0;
+            for(auto &i:nums)
+            {
+                if(++m[i]==2)
+                {
+                    temp++;
+                }
+            }
+            if(temp==0)
             {
                 break;
             }
-            s.insert(nums[i]);
-            i--;
-        }
-        i++;
-        return (i%3==0?i/3:(i/3)+1);
+            nums.erase(nums.begin(),nums.begin()+min(3,(int)nums.size()));
+            count++;
+        }    
+        return count;
     }
 };
