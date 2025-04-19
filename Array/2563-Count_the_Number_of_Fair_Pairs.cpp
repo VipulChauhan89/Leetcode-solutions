@@ -4,11 +4,11 @@ public:
     {
         long long ans=0;
         sort(nums.begin(),nums.end());
-        for(int i=0;i<nums.size()-1;i++)
+        for(int i=0;i+1<nums.size();i++)
         {
-            auto up=upper_bound(nums.begin()+i+1,nums.end(),upper-nums[i]);
-            auto low=lower_bound(nums.begin()+i+1,nums.end(),lower-nums[i]);
-            ans+=(up-low);
+            int mn=lower-nums[i],mx=upper-nums[i];
+            auto h=upper_bound(nums.begin()+i+1,nums.end(),mx),l=lower_bound(nums.begin()+i+1,nums.end(),mn);
+            ans+=(h-l);
         }
         return ans;
     }
