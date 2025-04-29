@@ -2,24 +2,24 @@ class Solution {
 public:
     long long countSubarrays(vector<int> &nums,int k) 
     {
-        long long mx=*max_element(nums.begin(),nums.end()),c=0,l=0,r=0,ans=0;
-        while(r<nums.size())
+        int n=nums.size(),j=0;
+        long long mx=*max_element(nums.begin(),nums.end()),count=0,mxOccurance=0;
+        for(int i=0;i<n;i++)
         {
-            if(nums[r]==mx)
+            if(nums[i]==mx)
             {
-                c++;
+                mxOccurance++;
             }
-            while(c>=k)
+            while(mxOccurance>=k)
             {
-                if(nums[l]==mx)
+                if(nums[j]==mx)
                 {
-                    c--;
+                    mxOccurance--;
                 }
-                l++;
-                ans+=nums.size()-r;
+                j++;
             }
-            r++;
-        }    
-        return ans;
+            count+=j;
+        }
+        return count;
     }
 };
