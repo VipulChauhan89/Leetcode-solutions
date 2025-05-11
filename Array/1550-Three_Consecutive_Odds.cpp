@@ -7,7 +7,8 @@ public:
     bool threeConsecutiveOdds(vector<int> &arr) 
     {
         bool ans=false;
-        for(int i=2;i<arr.size();i++)
+        int n=arr.size();
+        for(int i=2;i<n;i++)
         {
             if(isOdd(arr[i-2]) && isOdd(arr[i-1]) && isOdd(arr[i]))
             {
