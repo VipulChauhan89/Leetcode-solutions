@@ -1,25 +1,29 @@
 class Solution {
 public:
-    void dfs(int i,int distance,vector<int> &edges,vector<int>& path) 
+    void dfs(int current,int distance,vector<int> &edges,vector<int> &distances) 
     {
-        while (i!=-1 && path[i]==-1) 
+        while(current!=-1 && distances[current]==-1) 
         {
-            path[i]=distance++;
-            i=edges[i];
+            distances[current]=distance++;
+            current=edges[current];
         }
     }
-    int closestMeetingNode(vector<int>& edges,int node1,int node2) 
+    int closestMeetingNode(vector<int> &edges,int node1,int node2) 
     {
-        int ans=-1,min_dist=INT_MAX;
-        vector<int> m1(edges.size(),-1),m2(edges.size(),-1);
-        dfs(node1,0,edges,m1);
-        dfs(node2,0,edges,m2);
-        for(int i=0;i<edges.size();i++)
+        int ans=-1,Min_Of_Max=INT_MAX,n=edges.size();
+        vector<int> dist1(n,-1),dist2(n,-1);
+        dfs(node1,0,edges,dist1);
+        dfs(node2,0,edges,dist2);
+        for(int i=0;i<n;i++) 
         {
-            if(min(m1[i],m2[i])>=0 && max(m1[i],m2[i])<min_dist) 
+            if(dist1[i]>=0 && dist2[i]>=0) 
             {
-                min_dist=max(m1[i],m2[i]);
-                ans=i;
+                int maxDist=max(dist1[i],dist2[i]);
+                if(maxDist<Min_Of_Max) 
+                {
+                    Min_Of_Max=maxDist;
+                    ans=i;
+                }
             }
         }
         return ans;
