@@ -1,25 +1,24 @@
 class Solution {
 public:
-    int mod=1000000007;
-    int numSubseq(vector<int> &nums,int target) 
+    int numSubseq(vector<int> &nums,int target)
     {
+        int mod=1e9+7,n=nums.size(),l=0,r=n-1,ans=0;
         sort(nums.begin(),nums.end());
-        int ans=0,n=nums.size(),left=0,right=n-1;
-        vector<int> pow2(n+1,1);
-        for(int i=1;i<=n;i++) 
+        vector<int> power(n,1);
+        for(int i=1;i<n;i++)
         {
-            pow2[i]=(2*pow2[i-1])%mod;
+            power[i]=(power[i-1]*2)%mod;
         }
-        while(left<=right) 
+        while(l<=r)
         {
-            if(nums[left]+nums[right]<=target) 
+            if(nums[l]+nums[r]<=target)
             {
-                ans=(ans+pow2[right-left])%mod;
-                left++;
-            } 
-            else 
+                ans=(ans+power[r-l])%mod;
+                l++;
+            }
+            else
             {
-                right--;
+                r--;
             }
         }
         return ans;
