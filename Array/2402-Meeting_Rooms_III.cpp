@@ -1,45 +1,45 @@
 class Solution {
 public:
-    int mostBooked(int n,vector<vector<int>> &meetings) 
+    int mostBooked(int n,vector<vector<int>> &meetings)
     {
-        vector<int> ans(n,0);
-        vector<long long> time(n,0);
+        vector<long long> v(n,0);
+        vector<int> count(n,0);
         sort(meetings.begin(),meetings.end());
-        int mx=-1,id=-1;
-        for(int i=0;i<meetings.size();i++)
+        for(auto &i:meetings)
         {
-            int s=meetings[i][0],e=meetings[i][1],mn=-1;
-            bool flag=false;
-            long long val=1e18;
-            for(int j=0;j<n;j++)
+            int start=i[0],end=i[1],roomIndex=-1;
+            long long earliest=LLONG_MAX;
+            bool assigned=false;
+            for(int i=0;i<n;i++)
             {
-                if(time[j]<val)
+                if(v[i]<earliest)
                 {
-                    val=time[j];
-                    mn=j;
+                    earliest=v[i];
+                    roomIndex=i;
                 }
-                if(time[j]<=s)
+                if(v[i]<=start)
                 {
-                    flag=true;
-                    ans[j]++;
-                    time[j]=e;
+                    v[i]=end;
+                    count[i]++;
+                    assigned=true;
                     break;
                 }
             }
-            if(flag==false)
+            if(!assigned)
             {
-                ans[mn]++;
-                time[mn]+=(1ll*(e-s));
+                v[roomIndex]+=(end-start);
+                count[roomIndex]++;
             }
         }
+        int ans=0,mxC=0;
         for(int i=0;i<n;i++)
         {
-            if(ans[i]>mx)
+            if(count[i]>mxC)
             {
-                mx=ans[i];
-                id=i;
+                mxC=count[i];
+                ans=i;
             }
         }
-        return id;
+        return ans;
     }
 };
