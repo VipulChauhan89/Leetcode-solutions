@@ -1,17 +1,26 @@
 class Solution {
 public:
-    vector<string> removeSubfolders(vector<string> &folder) 
+    vector<string> removeSubfolders(vector<string> &folder)
     {
         sort(folder.begin(),folder.end());
         vector<string> ans;
-        ans.push_back(folder[0]);
-        for(int i=1;i<folder.size();i++)
+        for(auto &i:folder)
         {
-            string last=ans.back();
-            last.push_back('/');
-            if(folder[i].compare(0,last.size(),last)!=0)
+            if(ans.empty())
             {
-                ans.push_back(folder[i]);
+                ans.push_back(i);
+            }
+            else
+            {
+                string prev=ans.back();
+                if(i.find(prev)==0 && i.size()>prev.size() && i[prev.size()]=='/')
+                {
+                    continue;
+                }
+                else
+                {
+                    ans.push_back(i);
+                }
             }
         }
         return ans;
