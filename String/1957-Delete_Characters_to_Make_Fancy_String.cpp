@@ -1,25 +1,15 @@
 class Solution {
 public:
-    string makeFancyString(string s) 
+    string makeFancyString(string s)
     {
         string ans="";
-        ans.push_back(s[0]);
-        int n=s.size(),cnt=1;
-        for(int i=1;i<n;i++)
+        for(auto &i:s)
         {
-            if(s[i]==ans.back())
+            if(ans.size()>=2 && ans.back()==i && ans[ans.size()-2]==i)
             {
-                cnt++;
-                if(cnt<3)
-                {
-                    ans.push_back(s[i]);
-                }
+                continue;
             }
-            else
-            {
-                cnt=1;
-                ans.push_back(s[i]);
-            }
+            ans.push_back(i);
         }
         return ans;
     }
