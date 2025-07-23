@@ -1,41 +1,44 @@
 class Solution {
 public:
-    int maximumGain(string s, int x, int y) {
-        int aCount=0,bCount=0,lesser=min(x,y),ans=0;
-        for(auto i:s) 
+    int remove(string &s,char fi,char se,int fp,int sp)
+    {
+        int ans=0;
+        vector<char> st1,st2;
+        for(auto &i:s)
         {
-            if(i>'b') 
+            if(!st1.empty() && st1.back()==fi && i==se)
             {
-                ans+=min(aCount,bCount)*lesser;
-                aCount=0;
-                bCount=0;
-            } 
-            else if(i=='a') 
+                st1.pop_back();
+                ans+=fp;
+            }
+            else
             {
-                if(x<y && bCount>0) 
-                {
-                    bCount--;
-                    ans+=y;
-                } 
-                else 
-                {
-                    aCount++;
-                }
-            } 
-            else 
-            {
-                if(x>y && aCount>0) 
-                {
-                    aCount--;
-                    ans+=x;
-                } 
-                else 
-                {
-                    bCount++;
-                }
+                st1.push_back(i);
             }
         }
-        ans+=min(aCount,bCount)*lesser;
+        for(auto &i:st1)
+        {
+            if(!st2.empty() && st2.back()==se && i==fi)
+            {
+                st2.pop_back();
+                ans+=sp;
+            }
+            else
+            {
+                st2.push_back(i);
+            }
+        }
         return ans;
+    }
+    int maximumGain(string s,int x,int y)
+    {
+        if(x<y)
+        {
+            return remove(s,'b','a',y,x);
+        }
+        else
+        {
+            return remove(s,'a','b',x,y);
+        }
     }
 };
