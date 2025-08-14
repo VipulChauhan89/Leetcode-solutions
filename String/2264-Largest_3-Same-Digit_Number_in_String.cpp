@@ -1,15 +1,25 @@
 class Solution {
 public:
-    string largestGoodInteger(string num) 
+    string largestGoodInteger(string num)
     {
-        int ans=-1;
-        for(int i=2;i<num.length();i++)
+        int count=0;
+        char prev='0',mxD=' ';
+        for(auto &i:num)
         {
-            if(num[i-2]==num[i-1] && num[i-1]==num[i])
+            if(i==prev)
             {
-                ans=max(ans,num[i-2]-'0');
+                count++;
             }
+            else 
+            {
+                count=1;
+            }
+            if(count==3)
+            {
+                mxD=max(mxD,i);
+            }
+            prev=i;
         }
-        return (ans==-1)?"":string(3,'0'+ans);
+        return ((mxD==' ')?"":string(3,mxD));
     }
 };
