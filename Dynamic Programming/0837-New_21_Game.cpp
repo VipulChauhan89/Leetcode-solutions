@@ -1,20 +1,20 @@
 class Solution {
 public:
-    double new21Game(int n,int k,int maxPts) 
+    double new21Game(int n,int k,int maxPts)
     {
-        if(k==0 || k+maxPts<=n)
+        if(k==0 || n>=k+maxPts)
         {
-            return 1;
+            return 1.0;
         }
         vector<double> dp(n+1);
-        double currSum=1,ans=0;
         dp[0]=1;
+        double mx=1,ans=0;
         for(int i=1;i<=n;i++)
         {
-            dp[i]=currSum/maxPts;
+            dp[i]=mx/maxPts;
             if(i<k)
             {
-                currSum+=dp[i];
+                mx+=dp[i];
             }
             else
             {
@@ -22,7 +22,7 @@ public:
             }
             if(i-maxPts>=0)
             {
-                currSum-=dp[i-maxPts];
+                mx-=dp[i-maxPts];
             }
         }
         return ans;
