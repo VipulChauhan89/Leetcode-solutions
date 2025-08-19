@@ -1,24 +1,20 @@
-class Solution 
-{
+class Solution {
 public:
-    long long zeroFilledSubarray(vector<int>& nums) 
+    long long zeroFilledSubarray(vector<int> &nums)
     {
-        long long count = 0;
-        long long ans = 0;
-        
-        for(int i=0; i<nums.size(); i++)
+        long long ans=0,current=0;
+        for(auto &i:nums)
         {
-            if(nums[i]==0)
+            if(i==0)
             {
-                count++;
-                ans += count;
+                current++;
+                ans+=current;
             }
             else
             {
-                count = 0;
+                current=0;
             }
         }
         return ans;
     }
-    
 };
