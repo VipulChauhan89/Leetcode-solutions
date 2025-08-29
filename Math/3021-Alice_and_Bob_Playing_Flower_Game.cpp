@@ -1,15 +1,8 @@
 class Solution {
 public:
-    long long countOdd(int n) 
+    long long flowerGame(int n,int m)
     {
-        return (n+1)/2;
-    }
-    long long countEven(int n) 
-    {
-        return n/2;
-    }
-    long long flowerGame(int n,int m) 
-    {
-        return countOdd(n)*countEven(m)+countOdd(m)*countEven(n);
+        long long odx=(n+1)/2,evx=n/2,ody=(m+1)/2,evy=m/2;
+        return (odx*evy)+(evx*ody);
     }
 };
