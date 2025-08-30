@@ -1,30 +1,33 @@
 class Solution {
 public:
-    bool isValidSudoku(vector<vector<char>>& board) 
+    bool isValidSudoku(vector<vector<char>> &board)
     {
-        unordered_set<string> s;
-        for(int i=0;i<9;i++)
+        int n=9;
+        vector<unordered_set<int>> r(n),c(n),b(n);
+        for(int i=0;i<n;i++)
         {
-            for(int j=0;j<9;j++)
+            for(int j=0;j<n;j++)
             {
                 if(board[i][j]!='.')
                 {
-                    string r="row"+to_string(i)+board[i][j];
-                    string c="col"+to_string(j)+board[i][j];
-                    string b="block"+to_string((i/3)*3+j/3)+board[i][j];
-                    if(s.find(r)!=s.end() || s.find(c)!=s.end())
+                    int num=board[i][j]-'0';
+                    int bindex=floor(i/3)*3+floor(j/3);
+                    if(r[i].count(num))
                     {
                         return false;
                     }
-                    if(s.find(b)!=s.end())
+                    if(c[j].count(num))
                     {
                         return false;
                     }
-                    s.insert(r);
-                    s.insert(c);
-                    s.insert(b);
+                    if(b[bindex].count(num))
+                    {
+                        return false;
+                    }
+                    r[i].insert(num);
+                    c[j].insert(num);
+                    b[bindex].insert(num);
                 }
-                
             }
         }
         return true;
