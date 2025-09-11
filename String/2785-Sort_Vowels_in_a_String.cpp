@@ -2,36 +2,27 @@ class Solution {
 public:
     bool isVowel(char c)
     {
-        if(c=='a' || c=='e' || c=='i' || c=='o' || c=='u')
-        {
-            return true;
-        }
-        return false;
+        return string("AEIOUaeiou").find(c)!=string::npos;
     }
-    string sortVowels(string s) 
+    string sortVowels(string s)
     {
-        string ans="";
-        vector<char> v;
-        for(auto i:s)
+        vector<char> vowels;
+        int v_index=0;
+        for(auto &i:s)
         {
-            char c=tolower(i);
-            if(isVowel(c))
+            if(isVowel(i))
             {
-                v.push_back(i);
+                vowels.push_back(i);
             }
         }
-        sort(v.begin(),v.end());
-        int j=0;
-        for(auto i:s)
+        sort(vowels.begin(),vowels.end());
+        for(int i=0;i<s.size();i++)
         {
-            char c=tolower(i);
-            if(isVowel(c))
+            if(isVowel(s[i]))
             {
-                ans+=v[j++];
-                continue;
+                s[i]=vowels[v_index++];
             }
-            ans+=i;
         }
-        return ans;
+        return s;
     }
 };
