@@ -1,43 +1,30 @@
-struct Info {
-    string name;
-    string cuisine;
-    int rating{};
-    Info()=default;
-    Info(string name,string cuisine,int rating):name{name},cuisine{cuisine},rating{rating}{}
-    bool operator<(const Info &first) const 
-    {
-        if(rating==first.rating) 
-        {
-            return name<first.name;
-        }
-        return rating>first.rating;
-    }
-};
-class FoodRatings 
-{
+class FoodRatings {
 public:
-    unordered_map<string,Info> foodNameToInfo;
-    unordered_map<string,set<Info>> cuisineNameToSortedInfo;
-    FoodRatings(vector<string> &foods,vector<string> &cuisines,vector<int> &ratings) 
+    unordered_map<string,set<pair<int,string>>> cuisRating;
+    unordered_map<string,int> foodRating;
+    unordered_map<string,string> foodCuis;
+    FoodRatings(vector<string> &foods,vector<string> &cuisines,vector<int> &ratings)
     {
-        for(size_t i=0;i<foods.size();i++) 
+        for(int i=0;i<foods.size();i++)
         {
-            foodNameToInfo.emplace(foods[i],Info(foods[i],cuisines[i],ratings[i]));
-            cuisineNameToSortedInfo[cuisines[i]].emplace(foods[i],cuisines[i],ratings[i]);
+            foodRating.insert({foods[i],ratings[i]});
+            foodCuis.insert({foods[i],cuisines[i]});
+            cuisRating[cuisines[i]].insert({-ratings[i],foods[i]});
         }
     }
     
-    void changeRating(const string &food,int newRating) 
+    void changeRating(string food,int newRating)
     {
-        Info &toUpdate=foodNameToInfo[food];
-        cuisineNameToSortedInfo[toUpdate.cuisine].erase(toUpdate);
-        toUpdate.rating=newRating;
-        cuisineNameToSortedInfo[toUpdate.cuisine].insert(toUpdate);
+        string cus=foodCuis[food];
+        int oldRating=foodRating[food];
+        cuisRating[cus].erase({-oldRating,food});
+        cuisRating[cus].insert({-newRating,food});
+        foodRating[food]=newRating;
     }
-
-    string highestRated(const string &cuisine) const 
+    
+    string highestRated(string cuisine)
     {
-        return cuisineNameToSortedInfo.at(cuisine).begin()->name;
+        return cuisRating[cuisine].begin()->second;
     }
 };
 
