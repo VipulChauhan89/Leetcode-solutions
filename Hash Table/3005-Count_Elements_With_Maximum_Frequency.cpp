@@ -1,19 +1,19 @@
 class Solution {
 public:
-    int maxFrequencyElements(vector<int> &nums) 
+    int maxFrequencyElements(vector<int> &nums)
     {
-        int mx=INT_MIN,ans=0;
+        int mx=0,ans=0;
         unordered_map<int,int> m;
-        for(auto i:nums)
+        for(auto &i:nums)
         {
             m[i]++;
             mx=max(mx,m[i]);
         }
-        for(auto &i:m)
+        for(auto &i:nums)
         {
-            if(i.second==mx)
+            if(m[i]==mx)
             {
-                ans+=i.second;
+                ans++;
             }
         }
         return ans;
