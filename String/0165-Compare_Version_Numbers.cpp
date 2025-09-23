@@ -1,28 +1,27 @@
 class Solution {
 public:
-    int compareVersion(string version1,string version2) 
+    int compareVersion(string version1,string version2)
     {
-        int n1=version1.size(),n2=version2.size(),x1=0,x2=0;
-        for(int i=0,j=0;i<n1 || j<n2;i++,j++)
+        stringstream s1(version1),s2(version2);
+        string t1,t2;
+        while(true)
         {
-            while(i<n1 && version1[i]!='.')
+            t1.clear();
+            t2.clear();
+            bool ok1=static_cast<bool>(getline(s1,t1,'.')),ok2=static_cast<bool>(getline(s2,t2,'.'));
+            if(!ok1 && !ok2)
             {
-                x1=10*x1+(version1[i++]-'0');
+                break;
             }
-            while(j<n2 && version2[j]!='.')
-            {
-                x2=10*x2+(version2[j++]-'0');
-            }
-            if(x1<x2)
+            int num1=t1.empty()?0:stoi(t1),num2=t2.empty()?0:stoi(t2);
+            if(num1<num2)
             {
                 return -1;
             }
-            else if(x1>x2)
+            else if(num1>num2)
             {
                 return 1;
             }
-            x1=0;
-            x2=0;
         }
         return 0;
     }
