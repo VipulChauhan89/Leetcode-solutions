@@ -1,40 +1,45 @@
 class Solution {
 public:
-    int trapRainWater(vector<vector<int>> &heightMap) 
+    bool valid(int n,int m,int r,int c)
     {
-        int n=heightMap.size(),m=heightMap[0].size(),ans=0;
-        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
-        vector<vector<int>> vis(n,vector<int>(m));
+        return (min(r,c)>=0 && r<n && c<m);
+    }
+    using T=pair<int,pair<int,int>>;
+    int trapRainWater(vector<vector<int>> &heightMap)
+    {
+        int n=heightMap.size(),m=heightMap[0].size(),water=0;
+        priority_queue<T,vector<T>,greater<T>> pq;
+        vector<vector<bool>> visited(n,vector<bool>(m,false));
+        vector<pair<int,int>> dir={{0,1},{0,-1},{1,0},{-1,0}};
         for(int i=0;i<n;i++)
         {
-            vis[i][0]=1;
-            vis[i][m-1]=1;
-            pq.push({heightMap[i][0],{i,0}});
-            pq.push({heightMap[i][m-1],{i,m-1}});
-        }
-        for(int i=0;i<m;i++)
-        {
-            vis[0][i]=1;
-            vis[n-1][i]=1;
-            pq.push({heightMap[0][i],{0,i}});
-            pq.push({heightMap[n-1][i],{n-1,i}});
-        }
-        while(!pq.empty())
-        {
-            int h=pq.top().first,r=pq.top().second.first,c=pq.top().second.second;
-            pq.pop();
-            vector<int> dr={-1,0,1,0},dc={0,-1,0,1};
-            for(int i=0;i<4;i++)
+            for(int j=0;j<m;j++)
             {
-                int nr=r+dr[i],nc=c+dc[i];
-                if(nr>=0 && nr<n && nc>=0 && nc<m && !vis[nr][nc])
+                if(i==0 || i==n-1 || j==0 || j==m-1)
                 {
-                    ans+=max(0,h-heightMap[nr][nc]);
-                    pq.push({max(h,heightMap[nr][nc]),{nr,nc}});
-                    vis[nr][nc]=1;
+                    pq.push({heightMap[i][j],{i,j}});
+                    visited[i][j]=true;
                 }
             }
         }
-        return ans;
+        while(!pq.empty())
+        {
+            T p=pq.top();
+            pq.pop();
+            for(auto &i:dir)
+            {
+                int nr=p.second.first+i.first,nc=p.second.second+i.second;
+                if(valid(n,m,nr,nc) && !visited[nr][nc])
+                {
+                    visited[nr][nc]=true;
+                    if(heightMap[nr][nc]<p.first)
+                    {
+                        water+=p.first-heightMap[nr][nc];
+                    }
+                    pq.push({max(p.first,heightMap[nr][nc]),{nr,nc}});
+                }
+            }
+        }
+        return water;
     }
 };
