@@ -1,6 +1,6 @@
 class Solution {
 public:
-    vector<int> getSneakyNumbers(vector<int> &nums) 
+    vector<int> getSneakyNumbers(vector<int> &nums)
     {
         vector<int> ans;
         unordered_map<int,int> m;
@@ -11,7 +11,7 @@ public:
             {
                 ans.push_back(i);
             }
-        }    
+        }
         return ans;
     }
 };
