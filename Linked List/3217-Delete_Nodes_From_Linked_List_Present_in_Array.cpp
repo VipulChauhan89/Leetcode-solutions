@@ -10,28 +10,22 @@
  */
 class Solution {
 public:
-    ListNode* modifiedList(vector<int> &nums,ListNode *head) 
+    ListNode* modifiedList(vector<int> &nums,ListNode *head)
     {
-        unordered_set<int> s;
-        for(auto i:nums)
+        unordered_set<int> m(nums.begin(),nums.end());
+        while(head && m.count(head->val))
         {
-            s.insert(i);
+            head=head->next;
         }
-        ListNode *temp=new ListNode();
-        temp->next=head;
-        ListNode *current=temp,*previous=temp;
-        while(current!=NULL)
+        ListNode *current=head;
+        while(current && current->next)
         {
-            if(s.count(current->val)!=0)
+            while(current->next && m.count(current->next->val))
             {
-                previous->next=current->next;
-            }
-            else
-            {
-                previous=current;
+                current->next=current->next->next;
             }
             current=current->next;
         }
-        return temp->next;
+        return head;
     }
 };
