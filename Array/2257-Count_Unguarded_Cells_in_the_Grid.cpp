@@ -1,63 +1,72 @@
 class Solution {
 public:
-    int countUnguarded(int m,int n,vector<vector<int>> &guards,vector<vector<int>> &walls) 
+    void dfs(int r,int c,string dir,vector<vector<int>> &vis,map<pair<int,int>,int> &mp)
     {
-        vector<vector<int>> visited(m,vector<int>(n,0));
-        for(auto &i:guards)
+        int n=vis.size(),m=vis[0].size();
+        if(r<0 || c<0 || r>=n || c>=m)
         {
-            visited[i[0]][i[1]]=3;
+            return;
         }
-        for(auto &i:walls)
+        if(mp.find({r, c})!=mp.end())
         {
-            visited[i[0]][i[1]]=2;
+            return;
         }
-        for(auto &i:guards)
+        else
         {
-            int k=i[0],l=i[1];
-            for(int j=k+1;j<m;j++)
-            {
-                if(visited[j][l]==3 || visited[j][l]==2)
-                {
-                    break;
-                }
-                visited[j][l]=1;
-            }
-            for(int j=k-1;j>=0;j--)
-            {
-                if(visited[j][l]==3 || visited[j][l]==2)
-                {
-                    break;
-                }
-                visited[j][l]=1;
-            }
-            for(int j=l+1;j<n;j++)
-            {
-                if(visited[k][j]==3 || visited[k][j]==2)
-                {
-                    break;
-                }
-                visited[k][j]=1;
-            }
-            for(int j=l-1;j>=0;j--)
-            {
-                if(visited[k][j]==3 || visited[k][j]==2)
-                {
-                    break;
-                }
-                visited[k][j]=1;
-            }
+            vis[r][c]=1;
         }
-        int ans=0;
+        if(dir=="r")
+        {
+            dfs(r,c+1,"r",vis,mp);
+        }
+        if(dir=="l")
+        {
+            dfs(r,c-1,"l",vis,mp);
+        }
+        if(dir=="u")
+        {
+            dfs(r-1,c,"u",vis,mp);
+        }
+        if(dir=="d")
+        {
+            dfs(r+1,c,"d",vis,mp);
+        }
+    }
+    int countUnguarded(int m,int n,vector<vector<int>> &guards,vector<vector<int>> &walls)
+    {
+        vector<vector<int>> vis(m,vector<int> (n));
+        queue<pair<int,int>> q;
+        map<pair<int,int>,int> mp;
+        for(auto i:guards)
+        {
+            q.push({i[0],i[1]});
+            mp[{i[0],i[1]}]++;
+            vis[i[0]][i[1]]=1;
+        }
+        for(auto i:walls)
+        {
+            mp[{i[0],i[1]}]++;
+            vis[i[0]][i[1]]=1;
+        }
+        for(auto i:guards)
+        {
+            int r=i[0],c=i[1];
+            dfs(r,c+1,"r",vis,mp);
+            dfs(r,c-1,"l",vis,mp);
+            dfs(r+1,c,"d",vis,mp);
+            dfs(r-1,c,"u",vis,mp);
+        }
+        int count=0;
         for(int i=0;i<m;i++)
         {
             for(int j=0;j<n;j++)
             {
-                if(visited[i][j]==0)
+                if(vis[i][j]==0)
                 {
-                    ans++;
+                    count++;
                 }
             }
         }
-        return ans;
+        return count;
     }
 };
