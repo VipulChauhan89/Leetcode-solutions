@@ -1,24 +1,26 @@
 class Solution {
 public:
-    long long maxRunTime(int n,vector<int> &batteries) 
+    long long maxRunTime(int n,vector<int> &batteries)
     {
-        long long l=1,h=accumulate(batteries.begin(),batteries.end(),0LL)/n;
-        while(l<h)
+        long long sum=std::reduce(batteries.begin(),batteries.end(),0LL);
+        long long l=*min_element(batteries.begin(),batteries.end()),r=sum/n,ans=0;
+        while(l<=r)
         {
-            long long mid=(h+l+1)/2,time=0;
-            for(auto i:batteries)
+            long long mid=(l+r)>>1,reserve=0;
+            for(int x:batteries)
             {
-                time+=min((long long)i,mid);
+                reserve+=min((long long)x,mid);
             }
-            if(mid*n<=time)
+            if(reserve>=mid*n)
             {
-                l=mid;
-            }
+                ans=mid;
+                l=mid+1;
+            } 
             else
             {
-                h=mid-1;
+                r=mid-1;
             }
         }
-        return l;
+        return ans; 
     }
 };
