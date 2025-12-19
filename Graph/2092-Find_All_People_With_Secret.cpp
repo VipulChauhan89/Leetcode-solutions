@@ -1,31 +1,67 @@
 class Solution {
 public:
-    void dfs(int u,int time,vector<pair<int,int>> list[],vector<int> &min)
+    vector<int> findAllPeople(int n,vector<vector<int>> &meetings,int firstPerson)
     {
-        for(auto [v,w]:list[u])
-        {
-            if(time<=w && min[v]>w)
-            {
-                min[v]=w;
-                dfs(v,w,list,min);
-            }
-        }
-    }
-    vector<int> findAllPeople(int n,vector<vector<int>> &meetings,int firstPerson) 
-    {
-        vector<pair<int,int>> list[n];
-        vector<int> min(n,INT_MAX),ans;
-        meetings.push_back({0,firstPerson,0});
-        min[0]=0;
-        for(int i=0;i<meetings.size();i++)
-        {
-            list[meetings[i][0]].push_back({meetings[i][1],meetings[i][2]});
-            list[meetings[i][1]].push_back({meetings[i][0],meetings[i][2]});
-        }
-        dfs(0,0,list,min);
+        sort(meetings.begin(),meetings.end(),[](vector<int> &a,vector<int> &b){
+            return a[2]<b[2];
+        });
+        vector<int> par(n);
         for(int i=0;i<n;i++)
         {
-            if(min[i]!=INT_MAX)
+            par[i]=i;
+        }
+        par[firstPerson]=0;
+        function<int(int)> find=[&](int a)
+        {
+            if(par[a]==a)
+            {
+                return a;
+            }
+            else
+            {
+                return par[a]=find(par[a]);
+            }
+        };
+        function<void(int,int b)> union_=[&](int a,int b)
+        {
+            if(a>b)
+            {
+                swap(a,b);
+            }
+            int A=find(a),B=find(b);
+            if(A<B)
+            {
+                par[B]=A;
+            }
+            else if(B<A)
+            {
+                par[A]=B;
+            }
+        };
+        for(int i=0;i<meetings.size();i++)
+        {
+            int j=i;
+            for(;j<meetings.size()&&meetings[i][2]==meetings[j][2];j++)
+            {
+                union_(meetings[j][0],meetings[j][1]);
+            }
+            for(int k=i;k<j;k++)
+            {
+                if(find(meetings[k][0])!=0)
+                {
+                    par[meetings[k][0]]=meetings[k][0];
+                }
+                if(find(meetings[k][1])!=0)
+                {
+                    par[meetings[k][1]]=meetings[k][1];
+                }
+            }
+            i=j-1;
+        }
+        vector<int> ans;
+        for(int i=0;i<n;i++)
+        {
+            if(par[i]==0)
             {
                 ans.push_back(i);
             }
