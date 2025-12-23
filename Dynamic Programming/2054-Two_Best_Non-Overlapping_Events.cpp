@@ -1,27 +1,32 @@
 class Solution {
 public:
-    int maxTwoEvents(vector<vector<int>> &events) 
+    int maxTwoEvents(vector<vector<int>> &events)
     {
-        int n=events.size(),ans=0,maxV=0,n2=n*2;
-        vector<tuple<int,bool,int>> time(n*2);
+        sort(events.begin(),events.end());
+        vector<vector<int>> endSorted=events;
+        sort(endSorted.begin(),endSorted.end(),[](auto &a,auto &b) {
+            return a[1] < b[1];
+        });
+        int n=events.size(),ans=0,j=0;
+        vector<int> maxValueTill(n);
+        maxValueTill[0]=endSorted[0][2];
+        for(int i=1;i<n;i++)
+        {
+            maxValueTill[i]=max(maxValueTill[i-1],endSorted[i][2]);
+        }
         for(int i=0;i<n;i++)
         {
-            int s=events[i][0],e=events[i][1],v=events[i][2];
-            time[2*i]={s,0,v};
-            time[2*i+1]={e,1,v};
-        }
-        sort(time.begin(),time.end());
-        for(auto &[t,isEnd,v]:time)
-        {
-            if(isEnd)
+            int start=events[i][0],value=events[i][2];
+            while(j<n && endSorted[j][1]<start)
             {
-                maxV=max(maxV,v);
-            } 
-            else
+                j++;
+            }
+            ans=max(ans,value);
+            if(j>0)
             {
-                ans=max(ans,maxV+v);
-            } 
+                ans=max(ans,value+maxValueTill[j-1]);
+            }
         }
-        return ans;    
+        return ans;
     }
 };
