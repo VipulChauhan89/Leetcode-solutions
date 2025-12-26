@@ -1,17 +1,17 @@
 class Solution {
 public:
-    int bestClosingTime(string customers) 
+    int bestClosingTime(string customers)
     {
-        int j=-1,score=0,maxScore=0;
-        for(int i=0;i<customers.size();i++) 
+        int bestTime=0,minPenalty=0,prefix=0,n=customers.length();
+        for(int i=0;i<n;i++)
         {
-            score+=(customers[i]=='Y')?1:-1;
-            if(score>maxScore) 
+            prefix+=customers[i]=='Y'?-1:1;
+            if(prefix<minPenalty)
             {
-                j=i;
-                maxScore=score;
+                bestTime=i+1;
+                minPenalty=prefix;
             }
         }
-        return j+1;
+        return bestTime;
     }
 };
