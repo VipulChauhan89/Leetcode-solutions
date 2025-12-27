@@ -10,17 +10,17 @@ public:
             int start=i[0],end=i[1],roomIndex=-1;
             long long earliest=LLONG_MAX;
             bool assigned=false;
-            for(int i=0;i<n;i++)
+            for(int j=0;j<n;j++)
             {
-                if(v[i]<earliest)
+                if(v[j]<earliest)
                 {
-                    earliest=v[i];
-                    roomIndex=i;
+                    earliest=v[j];
+                    roomIndex=j;
                 }
-                if(v[i]<=start)
+                if(v[j]<=start)
                 {
-                    v[i]=end;
-                    count[i]++;
+                    v[j]=end;
+                    count[j]++;
                     assigned=true;
                     break;
                 }
