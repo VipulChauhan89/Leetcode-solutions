@@ -1,26 +1,21 @@
 class Solution {
 public:
-    long long maxMatrixSum(vector<vector<int>> &matrix) 
+    long long maxMatrixSum(vector<vector<int>> &matrix)
     {
-        int mn=INT_MAX;
-        long long sum=0,count=0;
-        for(int i=0;i<matrix.size();i++)
+        long long sum=0;
+        int minAbs=INT_MAX;
+        bool negOdd=0;
+        for(auto &row:matrix)
         {
-            for(int j=0;j<matrix[0].size();j++)
+            for(auto &x:row)
             {
-                if(matrix[i][j]<0)
-                {
-                    count++;
-                }
-                int abs_value=abs(matrix[i][j]);
-                mn=min(mn,abs_value);
-                sum+=abs_value;
+                const bool neg=x<0;
+                const int absX=(1-neg*2)*x;
+                minAbs=min(minAbs,absX);
+                sum+=absX;
+                negOdd^=neg;
             }
         }
-        if(count%2==0)
-        {
-            return sum;
-        }
-        return sum-2*mn;
+        return sum-2*(negOdd)*minAbs;
     }
 };
