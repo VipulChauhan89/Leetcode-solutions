@@ -1,25 +1,26 @@
 class Solution {
 public:
-    int maxDotProduct(vector<int> &nums1,vector<int> &nums2) 
+    int maxDotProduct(vector<int> &nums1,vector<int> &nums2)
     {
-        int n=nums1.size(),m=nums2.size();
-        vector<vector<int>> memo(n,vector<int>(m,INT_MIN));
-        function<int(int, int)> dp=[&](int i,int j) 
+        int n1=nums1.size(),n2=nums2.size(),ans=INT_MIN;
+        if(n1<n2)
         {
-            if(i==n || j==m) 
+            return maxDotProduct(nums2,nums1);
+        }
+        int dp[2][501];
+        fill(&dp[0][0],&dp[0][0]+2*501,INT_MIN);
+        for(int i=n1-1;i>=0;i--)
+        {
+            for(int j=n2-1;j>=0;j--)
             {
-                return INT_MIN;
+                int x=nums1[i]*nums2[j],tmp=dp[i&1][j];
+                tmp=max(tmp,x);
+                tmp=max(tmp, x+(i+1<n1 && j+1<n2 ? dp[(i+1)&1][j+1]:0));
+                tmp=max(tmp,(j+1<n2 ? dp[i&1][(j+1)] : INT_MIN));
+                dp[i&1][j]=max(tmp,dp[(i+1)&1][j]);
+                ans=max(ans,dp[i&1][j]);
             }
-            if(memo[i][j]!=INT_MIN) 
-            {
-                return memo[i][j];
-            }
-            memo[i][j]=max(
-                nums1[i]*nums2[j]+max(dp(i+1,j+1),0),
-                max(dp(i+1,j),dp(i,j+1))
-            );
-            return memo[i][j];
-        };
-        return dp(0,0);
+        }
+        return ans;
     }
 };
