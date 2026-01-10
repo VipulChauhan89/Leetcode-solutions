@@ -1,41 +1,32 @@
 class Solution {
 public:
-    int minimumDeleteSum(string s1,string s2) 
+    int minimumDeleteSum(string s1,string s2)
     {
-        int n=s1.length(),m=s2.length(),sum=0;;
-	    vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
-        for(int i=0;i<n+1;i++)
+        int n=s1.size(),m=s2.size();
+        vector<vector<int>> dp(n+1,vector<int>(m+1,0));
+        for(int i=0;i<n;i++)
         {
-            for(int j=0;j<m+1;j++)
-            {    
-                if(i==0 || j==0);
-                {
-                    dp[i][j]=0;
-                }
-            }
-        }
-        for(int i=1;i<n+1;i++)
-        {
-            for(int j=1;j<m+1;j++)
+            for(int j=0;j<m;j++)
             {
-                if(s1[i-1]==s2[j-1])
+                if(s1[i]==s2[j])
                 {
-                    dp[i][j]=dp[i-1][j-1]+s1[i-1];
+                    dp[i+1][j+1]=dp[i][j]+s1[i];
                 }
                 else
                 {
-                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                    dp[i+1][j+1]=max(dp[i][j+1],dp[i+1][j]);
                 }
             }
         }
-        for(int i=0;i<n;++i)
+        int total=0;
+        for(char c:s1)
         {
-            sum+=s1[i];
+            total+=c;
         }
-        for(int i=0;i<m;++i)
+        for(char c:s2)
         {
-            sum+=s2[i];
+            total+=c;
         }
-        return sum-2*dp[n][m];
+        return total-2*dp[n][m];
     }
 };
