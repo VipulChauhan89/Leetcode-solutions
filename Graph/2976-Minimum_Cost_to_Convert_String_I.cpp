@@ -1,41 +1,57 @@
 class Solution {
 public:
-    long long minimumCost(string source,string target,vector<char> &original,vector<char> &changed,vector<int> &cost) 
+    void dijkstra(int src,vector<pair<int,int>> adj[],vector<int> &dist)
     {
-        int infinite=1<<29,n=source.length();
-        vector<vector<int>> graph(26,vector<int>(26));
-        for(int i=0;i<26;i++)
+        priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        dist[src]=0;
+        pq.push({0,src});
+        while(!pq.empty())
         {
-            fill(graph[i].begin(),graph[i].end(),infinite);
-            graph[i][i]=0;
+            auto [d,u]=pq.top();
+            pq.pop();
+            if(d>dist[u])
+            {
+                continue;
+            }
+            for(auto [v,w]:adj[u])
+            {
+                if(dist[v]>d+w)
+                {
+                    dist[v]=d+w;
+                    pq.push({dist[v],v});
+                }
+            }
         }
+    }
+    long long minimumCost(string source,string target,vector<char> &original,vector<char> &changed,vector<int> &cost)
+    {
+        if(source.size()!=target.size())
+        {
+            return -1;
+        }
+        vector<pair<int,int>> adj[26];
         for(int i=0;i<original.size();i++)
         {
-            int x=original[i]-'a',y=changed[i]-'a',z=cost[i];
-            graph[x][y]=min(graph[x][y],z);
+            adj[original[i]-'a'].push_back({changed[i]-'a',cost[i]});
         }
-        for(int k=0;k<26;k++)
+        vector<vector<int>> dist(26,vector<int>(26,INT_MAX));
+        for(int i=0;i<26;i++)
         {
-            for(int i=0;i<26;i++)
-            {
-                for(int j=0;j<26;j++)
-                {
-                    graph[i][j]=min(graph[i][j],graph[i][k]+graph[k][j]);
-                }
-            }
+            dijkstra(i,adj,dist[i]);
         }
         long long ans=0;
-        for(int i=0;i<n;i++)
+        for(int i=0;i<source.size();i++)
         {
-            int x=source[i]-'a',y=target[i]-'a';
-            if(x!=y)
+            int u=source[i]-'a',v=target[i]-'a';
+            if(u==v)
             {
-                if(graph[x][y]>=infinite)
-                {
-                    return -1;
-                }
-                ans+=graph[x][y];
+                continue;
             }
+            if(dist[u][v]==INT_MAX)
+            {
+                return -1;
+            }
+            ans+=dist[u][v];
         }
         return ans;
     }
