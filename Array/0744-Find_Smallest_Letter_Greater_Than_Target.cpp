@@ -1,21 +1,24 @@
 class Solution {
 public:
-    char nextGreatestLetter(vector<char> &letters, char target) 
+    char nextGreatestLetter(vector<char> &letters,char target)
     {
-        int l=0,h=letters.size()-1;
-        while(l<h)
+        int l=0,r=letters.size()-1;
+        if(target>=letters[r])
         {
-            int mid=l+(h-l)/2;
+            return letters[0];
+        }
+        while(l<=r)
+        {
+            int mid=l+(r-l)/2;
             if(letters[mid]<=target)
             {
                 l=mid+1;
             }
             else
             {
-                h=mid;
+                r=mid-1;
             }
         }
-        return letters[l]>target?letters[l]:letters[0];
-        
+        return letters[l];
     }
 };
