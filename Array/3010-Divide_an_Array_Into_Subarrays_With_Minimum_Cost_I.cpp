@@ -1,21 +1,21 @@
 class Solution {
 public:
-    int minimumCost(vector<int> &nums) 
-    { 
-        int n=nums.size(),a=nums[0],b=INT_MAX,b_index=0,c=INT_MAX;
+    int minimumCost(vector<int> &nums)
+    {
+        int n=nums.size(),sum=nums[0],a=INT_MAX,b=INT_MAX;
         for(int i=1;i<n;i++)
         {
-            if(nums[i]<b)
+            if(nums[i]<a)
             {
-                c=b;
-                b=nums[i];
-                b_index=i;
+                b=a;
+                a=nums[i];
             }
-            else if(nums[i]<c)
+            else if(nums[i]>=a && nums[i]<b)
             {
-                c=nums[i];
+                b=nums[i];
             }
         }
-        return a+b+c;
+        sum+=(a+b);
+        return sum;
     }
 };
