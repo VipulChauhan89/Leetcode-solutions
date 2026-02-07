@@ -1,18 +1,17 @@
 class Solution {
 public:
-    int minimumDeletions(string s) 
+    int minimumDeletions(string s)
     {
-        int n=s.size(),count=0,ans=0;
-        for(int i=n-1;i>=0;i--)
+        int n=s.size(),ans=n,a=0,b=0;
+        for(auto &i:s)
         {
-            if(s[i]=='a')
-            {
-                count++;
-            }
-            else
-            {
-                ans=min(ans+1,count);
-            }
+            a+=i&1;
+        }
+        for(auto &i:s)
+        {
+            a-=i&1;
+            ans=min(ans,a+b);
+            b+=~i&1;
         }
         return ans;
     }
