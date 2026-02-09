@@ -11,31 +11,32 @@
  */
 class Solution {
 public:
-    void inorder(TreeNode *root,vector<int> &a)
+    void inorder(TreeNode *node,vector<int> &vals)
     {
-        if(root!=NULL)
+        if(!node)
         {
-            inorder(root->left,a);
-            a.push_back(root->val);
-            inorder(root->right,a);
+            return;
         }
+        inorder(node->left,vals);
+        vals.push_back(node->val);
+        inorder(node->right,vals);
     }
-    TreeNode * buildTree(int s,int e,vector<int> &a)
+    TreeNode* build(const vector<int> &vals,int l,int r)
     {
-        if(s>e)
+        if(l>r)
         {
             return NULL;
         }
-        int mid=(s+e)/2;
-        TreeNode *root=new TreeNode(a[mid]);
-        root->left=buildTree(s,mid-1,a);
-        root->right=buildTree(mid+1,e,a);
-        return root;
+        int mid=(l+r)/2;
+        TreeNode *node=new TreeNode(vals[mid]);
+        node->left=build(vals,l,mid-1);
+        node->right=build(vals,mid+1,r);
+        return node;
     }
-    TreeNode *balanceBST(TreeNode *root) 
+    TreeNode* balanceBST(TreeNode *root)
     {
-        vector<int> a;
-        inorder(root,a);
-        return buildTree(0,a.size()-1,a);
+        vector<int> vals;
+        inorder(root,vals);
+        return build(vals,0,(int)vals.size()-1);
     }
 };
