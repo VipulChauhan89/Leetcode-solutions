@@ -1,22 +1,22 @@
 class Solution {
 public:
-    double champagneTower(int poured, int query_row, int query_glass) 
+    double champagneTower(int poured,int query_row,int query_glass)
     {
-        vector<double> current(1,poured);
-        for(int i=0;i<query_row;i++)
+        double tower[102][102]={0.0};
+        tower[0][0]=(double)poured;
+        for(int r=0;r<=query_row;r++)
         {
-            vector<double> next(i+2,0.0);
-            for(int j=0;j<current.size();j++)
+            for(int c=0;c<=r;c++)
             {
-                double overflow=(current[j]-1.0)/2.0;
-                if(overflow>0.0)
+                if(tower[r][c]>1.0)
                 {
-                    next[j]+=overflow;
-                    next[j+1]+=overflow;
+                    double excess=(tower[r][c]-1.0)/2.0;
+                    tower[r][c]=1.0;
+                    tower[r+1][c]+=excess;
+                    tower[r+1][c+1]+=excess;
                 }
             }
-            current=next;
         }
-        return min(1.0,current[query_glass]);
+        return tower[query_row][query_glass];
     }
 };
