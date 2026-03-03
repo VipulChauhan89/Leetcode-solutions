@@ -1,12 +1,12 @@
 class Solution {
 public:
-    char findKthBit(int n,int k) 
+    char findKthBit(int n,int k)
     {
         if(n==1)
         {
             return '0';
         }
-        int l=(1<<n)-1,mid=l/2+1;
+        int len=(1<<n)-1,mid=(len+1)/2;
         if(k==mid)
         {
             return '1';
@@ -15,6 +15,7 @@ public:
         {
             return findKthBit(n-1,k);
         }
-        return (findKthBit(n-1,l-k+1)=='0')?'1':'0';
+        char c=findKthBit(n-1,len-k+1);
+        return c=='0'?'1':'0';
     }
 };
