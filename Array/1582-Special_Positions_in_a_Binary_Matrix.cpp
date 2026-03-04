@@ -1,37 +1,32 @@
 class Solution {
 public:
-    bool check(vector<vector<int>> &mat,int i,int j)
+    int numSpecial(vector<vector<int>> &mat)
     {
-        int n=mat.size(),m=mat[0].size();
-        for(int k=0;k<n;k++)
+        int m=mat.size(),n=mat[0].size();
+        vector<int> row(m,0),col(n,0);
+        for(int i=0;i<m;i++)
         {
-            if(k!=i && mat[k][j]==1)
+            for(int j=0;j<n;j++)
             {
-                return false;
-            }
-        }
-        for(int k=0;k<m;k++)
-        {
-            if(k!=j && mat[i][k]==1)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    int numSpecial(vector<vector<int>> &mat) 
-    {
-        int n=mat.size(),m=mat[0].size(),total=0;
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<m;j++)
-            {
-                if(mat[i][j]==1 && check(mat,i,j))
+                if(mat[i][j]==1)
                 {
-                    total++;
+                    row[i]++;
+                    col[j]++;
+                }
+            } 
+        }
+        int ans=0;
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(mat[i][j]==1 && row[i]==1 && col[j]==1)
+                {
+                    ans++;
                 }
             }
-        }    
-        return total;  
+                
+        }
+        return ans;
     }
 };
