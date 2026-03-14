@@ -1,24 +1,31 @@
 class Solution {
 public:
-    void backtrack(string current,int n,vector<string> &happyStrings)
+    string getHappyString(int n,int k)
     {
-        if(current.size()==n)
+        int total=3*(1<<(n-1));
+        if(k>total)
         {
-            happyStrings.push_back(current);
-            return;
+            return "";
         }
-        for(auto i:{'a','b','c'})
+        k--;
+        string ans="";
+        char last='\0';
+        for(int pos=0;pos<n;pos++)
         {
-            if(current.empty() || current.back()!=i)
+            int branch=1<<(n-pos-1);
+            vector<char> choices;
+            for(char c:{'a','b','c'})
             {
-                backtrack(current+i,n,happyStrings);
+                if(c!=last)
+                {
+                    choices.push_back(c);
+                }
             }
+            int idx=k/branch;
+            ans+=choices[idx];
+            last=choices[idx];
+            k%=branch;
         }
-    }
-    string getHappyString(int n, int k) 
-    {
-        vector<string> happyStrings;
-        backtrack("",n,happyStrings);
-        return (k>happyStrings.size()?"":happyStrings[k-1]);   
+        return ans;
     }
 };
