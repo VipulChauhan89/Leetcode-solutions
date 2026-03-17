@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int largestSubmatrix(vector<vector<int>> &matrix) 
+    int largestSubmatrix(vector<vector<int>> &matrix)
     {
         int n=matrix.size(),m=matrix[0].size(),ans=0;
         for(int i=1;i<n;i++)
@@ -9,17 +9,16 @@ public:
             {
                 if(matrix[i][j]==1)
                 {
-                    matrix[i][j]=matrix[i-1][j]+1;
+                    matrix[i][j]+=matrix[i-1][j];
                 }
             }
         }
-        for(auto i:matrix)
+        for(int i=0;i<n;i++)
         {
-            sort(i.begin(),i.end());
-            for(int j=m-1,w=1;j>=0 && i[j]>0;j--,w++)
+            sort(matrix[i].rbegin(),matrix[i].rend());
+            for(int j=0;j<m;j++)
             {
-                int area=i[j]*w;
-                ans=max(ans,area);
+                ans=max(ans,matrix[i][j]*(j+1));
             }
         }
         return ans;
