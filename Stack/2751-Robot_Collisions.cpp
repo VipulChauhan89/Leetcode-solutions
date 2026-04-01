@@ -1,54 +1,53 @@
 class Solution {
 public:
-    vector<int> survivedRobotsHealths(vector<int> &positions,vector<int> &healths,string directions) 
+    vector<int> survivedRobotsHealths(vector<int> &positions,vector<int> &healths,string directions)
     {
-        vector<int> ans,indices(positions.size());
-        iota(indices.begin(),indices.end(),0);
-        sort(indices.begin(),indices.end(),[&positions](int A,int B){
-            return positions[A]<positions[B];
-        });
-        stack<int> st;
-        for(int i:indices)
+        int n=positions.size();
+        vector<int> order(n),st,ans;
+        iota(order.begin(),order.end(),0);
+        sort(order.begin(),order.end(),[&](int a,int b){ return positions[a]<positions[b]; });
+
+        vector<bool> alive(n,true);
+        for(int idx:order)
         {
-            if(directions.at(i)=='R')
+            if(directions[idx]=='R')
             {
-                st.push(i);
-            } 
-            else 
+                st.push_back(idx);
+            }
+            else
             {
-                if(st.empty())
+                while(!st.empty())
                 {
-                    continue;
-                } 
-                while(!st.empty() && healths.at(st.top())<=healths.at(i))
-                { 
-                    if(healths.at(st.top())==healths.at(i))
+                    int top=st.back();
+                    if(healths[top]<healths[idx])
                     {
-                        healths.at(i)=-1;
-                        healths.at(st.top())=-1;
-                        st.pop();
+                        alive[top]=false;
+                        st.pop_back();
+                        healths[idx]--;
+                    }
+                    else if(healths[top]>healths[idx])
+                    {
+                        alive[idx]=false;
+                        healths[top]--;
                         break;
                     }
                     else
                     {
-                        healths.at(st.top())=-1;
-                        st.pop();
-                        healths.at(i)--;
+                        alive[top]=false;
+                        alive[idx]=false;
+                        st.pop_back();
+                        break;
                     }
-                }
-                if(!st.empty() && healths.at(i)>0 && healths.at(st.top())> healths[i])
-                {
-                    healths.at(st.top())--;
-                    healths.at(i)=-1;
                 }
             }
         }
-        for(int i:healths)
+        for(int i=0;i<n;i++)
         {
-            if(i>0)
+            if(alive[i])
             {
-                ans.push_back(i);
-            } 
+                ans.push_back(healths[i]);
+            }
+
         }
         return ans;
     }
