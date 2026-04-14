@@ -1,35 +1,30 @@
 class Solution {
 public:
-    long long minimumTotalDistance(vector<int> &robot,vector<vector<int>> &factory) 
+    long long minimumTotalDistance(vector<int> &robot,vector<vector<int>> &factory)
     {
         sort(robot.begin(),robot.end());
         sort(factory.begin(),factory.end());
-        int m=robot.size(),n=factory.size();
-        vector<vector<long long>> dp(m+1,vector<long long>(n+1));
-        for(int i=0;i<m;i++) 
+        int n=robot.size(),m=factory.size();
+        long long INF=1e18;
+        vector<vector<long long>> dp(n+1,vector<long long>(m+1,INF));
+        for(int j=0;j<=m;j++)
         {
-            dp[i][n]=LLONG_MAX;
+            dp[0][j]=0;
         }
-        for(int j=n-1;j>=0;j--) 
+        for(int j=1;j<=m;j++)
         {
-            long long prefix=0;
-            deque<pair<int,long long>> q;
-            q.push_back({m,0});
-            for(int i=m-1;i>=0;i--) 
+            int pos=factory[j-1][0],limit=factory[j-1][1];
+            for(int i=0;i<=n;i++)
             {
-                prefix+=abs(robot[i]-factory[j][0]);
-                while(!q.empty() && q.front().first>i+factory[j][1]) 
+                dp[i][j]=dp[i][j-1];
+                long long dist=0;
+                for(int k=1;k<=limit && i-k>=0;k++)
                 {
-                    q.pop_front();
+                    dist+=abs(robot[i-k]-pos);
+                    dp[i][j]=min(dp[i][j],dp[i-k][j-1]+dist);
                 }
-                while(!q.empty() && q.back().second>=dp[i][j+1]-prefix) 
-                {
-                    q.pop_back();
-                }
-                q.push_back({i,dp[i][j+1]-prefix});
-                dp[i][j]=q.front().second+prefix;
             }
         }
-        return dp[0][0];
+        return dp[n][m];
     }
 };
