@@ -1,70 +1,82 @@
 class Solution {
 public:
-    bool can(vector<long long> &a,int k,long long d)
+    int maxDistance(int side,vector<vector<int>> &points,int k)
     {
-        int n=a.size();
-        vector<long long> b=a;
-        for(auto x:a)
+        vector<long long> res;
+        for(auto &p:points)
         {
-            b.push_back(x+a.back());
-        }
-        for(int i=0;i<n;i++)
-        {
-            int count=1;
-            long long last=b[i];
-            for(int j=i+1;j<i+n;j++)
+            int x=p[0],y=p[1];
+            if(x==0)
             {
-                if(b[j]-last>=d)
+                res.push_back(y);
+            }
+            else if(y==side)
+            {
+                res.push_back((long long)side+x);
+            } 
+            else if(x==side)
+            {
+                res.push_back((long long)side*3-y);
+            } 
+            else
+            {
+                res.push_back((long long)side*4-x);
+            }
+        }
+        sort(res.begin(),res.end());
+        auto check = [&](int n)
+        {
+            int m=res.size();
+            vector<int> idx(k);
+            long long curr=res[0];
+            idx[0]=0;
+            for(int i=1;i<k;i++)
+            {
+                auto it=lower_bound(res.begin(),res.end(),curr+n);
+                if(it==res.end())
                 {
-                    count++;
-                    last=b[j];
+                    return false;
+                } 
+                idx[i]=distance(res.begin(),it);
+                curr=*it;
+            }
+            if(res[idx[k-1]]-res[0]<=(long long)side*4-n)
+            {
+                return true;
+            } 
+            for(idx[0]=1;idx[0]<idx[1];idx[0]++)
+            {
+                for(int j=1;j<k;j++)
+                {
+                    while(idx[j]<m && res[idx[j]]<res[idx[j-1]]+n)
+                    {
+                        idx[j]++;
+                    }
+                    if(idx[j]==m)
+                    {
+                        return false;
+                    } 
                 }
-                if(count>=k)
+                if(res[idx[k-1]]-res[idx[0]]<=(long long)side*4-n)
                 {
                     return true;
                 }
             }
-        }
-        return false;
-    }
-    int maxDistance(int side,vector<vector<int>> &points,int k)
-    {
-        vector<long long> a;
-        for(auto &p:points)
+            return false;
+        };
+        int left=1,right=(1LL*side*4)/k+1;
+        while(left+1<right)
         {
-            int x=p[0],y=p[1];
-            if(y==0)
+            int mid=left+(right-left)/2;
+            if(check(mid))
             {
-                a.push_back(x);
-            }
-            else if(x==side)
-            {
-                a.push_back(side+y);
-            }
-            else if(y==side)
-            {
-                a.push_back(2LL*side+(side-x));
+                left=mid;
             }
             else
             {
-                a.push_back(3LL*side+(side-y));
+                right=mid;
             }
         }
-        sort(a.begin(),a.end());
-        long long low=0,high=4LL*side,ans=0;
-        while(low<=high)
-        {
-            long long mid=(low+high)/2;
-            if(can(a,k,mid))
-            {
-                ans=mid;
-                low=mid+1;
-            }
-            else
-            {
-                high=mid-1;
-            }
-        }
-        return ans;
+        return left;
     }
 };
