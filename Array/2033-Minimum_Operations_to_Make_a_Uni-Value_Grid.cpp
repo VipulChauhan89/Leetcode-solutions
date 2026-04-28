@@ -1,29 +1,39 @@
 class Solution {
 public:
-    int minOperations(vector<vector<int>> &grid,int x) 
+    int minOperations(vector<vector<int>> &grid,int x)
     {
-        vector<int> v;
-        for(auto &i:grid) 
+        int n=grid.size(),m=grid[0].size(),mn=grid[0][0],mx=mn;
+        int N =n*m;
+        vector<int> freq(10001,0);
+        for(auto &row:grid)
         {
-            for(auto &j:i) 
+            for(auto val:row)
             {
-                v.push_back(j);
+                if((val-grid[0][0])%x!=0)
+                {
+                    return -1;
+                }
+                freq[val]++;
+                mn=min(mn,val);
+                mx=max(mx,val);
             }
         }
-        int mod=v[0]%x;
-        for(auto &i:v) 
+        int target=(N+1)/2;
+        int acc=0,median=mn;
+        for(int i=mn;i<=mx;i+=x)
         {
-            if(i%x!=mod)
+            acc+=freq[i];
+            if(acc>=target)
             {
-                return -1;
-            } 
+                median=i;
+                break;
+            }
         }
-        sort(v.begin(),v.end());
-        int median=v[v.size()/2],op=0;
-        for(auto &i:v) 
+        int ops=0;
+        for(int i=mn;i<=mx;i+=x)
         {
-            op+=abs(i-median)/x;
+            ops+=abs(i-median)/x*freq[i];
         }
-        return op;
+        return ops;
     }
 };
