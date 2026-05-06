@@ -1,26 +1,32 @@
 class Solution {
 public:
-    vector<vector<char>> rotateTheBox(vector<vector<char>> &box) 
+    vector<vector<char>> rotateTheBox(vector<vector<char>> &boxGrid)
     {
-        int r=box.size(),c=box[0].size();
-        vector<vector<char>> ans(c,vector<char>(r,'.'));
-        for(int i=0;i<r;i++)
+        int rows=boxGrid.size(),cols=boxGrid[0].size();
+        for(int r=0;r<rows;r++)
         {
-            int k=c-1;
-            for (int j=c-1;j>=0;j--)
+            int p=0;
+            for(int c=0;c<cols;c++)
             {
-                if(box[i][j]=='#')
+                if(boxGrid[r][c]=='.')
                 {
-                    ans[k][r-i-1]='#';
-                    k--;
+                    swap(boxGrid[r][c],boxGrid[r][p]);
+                    p++;
                 }
-                else if(box[i][j]=='*')
+                else if(boxGrid[r][c]=='*')
                 {
-                    ans[j][r-i-1]='*';
-                    k=j-1;
+                    p=c+1;
                 }
             }
         }
-        return ans;
+        vector<vector<char>> res(cols,vector<char>(rows));
+        for(int r=0;r<rows;r++)
+        {
+            for(int c=0;c<cols;c++)
+            {
+                res[c][rows-1-r]=boxGrid[r][c];
+            }
+        }    
+        return res;
     }
 };
