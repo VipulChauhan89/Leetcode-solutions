@@ -1,31 +1,42 @@
 class Solution {
 public:
-    int longestCommonPrefix(vector<int> &arr1,vector<int> &arr2) 
+    int digits(int x)
     {
-        unordered_map<int,int> m;
-        for(auto i:arr1)
+        int count=0;
+        while(x>0)
         {
-            while(i>0)
+            count++;
+            x/=10;
+        }
+        return count;
+    }
+    int longestCommonPrefix(vector<int> &arr1,vector<int> &arr2)
+    {
+        unordered_set<int> prefixes;
+        for(int num:arr1)
+        {
+            int x=num;
+            while(x>0)
             {
-                m[i]++;
-                i/=10;
+                prefixes.insert(x);
+                x/=10;
             }
         }
-        int mx=INT_MIN;
-        for(auto i:arr2)
+        int ans=0;
+        for(int num:arr2)
         {
-            int len=log10(i)+1;
-            while(i>0)
+            int x=num,len=digits(num);
+            while(x>0)
             {
-                if(m.find(i)!=m.end())
+                if(prefixes.count(x))
                 {
+                    ans=max(ans,len);
                     break;
                 }
-                i/=10;
+                x/=10;
                 len--;
             }
-            mx=max(mx,len);
         }
-        return mx;
+        return ans;
     }
 };
