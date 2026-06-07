@@ -11,29 +11,25 @@
  */
 class Solution {
 public:
-    TreeNode* createBinaryTree(vector<vector<int>> &descriptions) {
-        int root=-1,n=descriptions.size();
-        unordered_map<int,int> parent;
+    TreeNode* createBinaryTree(vector<vector<int>> &descriptions)
+    {
         unordered_map<int,TreeNode*> node;
-        parent.reserve(n);
-        node.reserve(n);
-        for(auto &d:descriptions) 
+        node.reserve(descriptions.size()+1);
+        int root=0;
+        for(auto &i:descriptions)
         {
-            int x=d[0],y=d[1],l=d[2];
-            if(node.count(x)==0) 
+            int x=i[0],y=i[1],isLeft=i[2];
+            if(!node.contains(x))
             {
                 node[x]=new TreeNode(x);
-                if(parent.count(x)==0)
-                {
-                    root=x;
-                }
+                root^=x;
             }
-            if(node.count(y)==0) 
+            if(!node.contains(y))
             {
                 node[y]=new TreeNode(y);
+                root^=y;
             }
-            parent[y]=x;
-            if(l)
+            if(isLeft)
             {
                 node[x]->left=node[y];
             }
@@ -41,10 +37,7 @@ public:
             {
                 node[x]->right=node[y];
             }
-        }
-        while(parent.count(root))
-        {
-            root=parent[root];
+            root^=y;
         }
         return node[root];
     }
