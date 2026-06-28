@@ -1,20 +1,21 @@
 class Solution {
 public:
-    int maximumElementAfterDecrementingAndRearranging(vector<int> &arr) 
+    int maximumElementAfterDecrementingAndRearranging(vector<int> &arr)
     {
-        sort(arr.begin(),arr.end());
-        arr[0]=1;
-        for(int i=1;i<arr.size();i++)
+        vector<int> freq(1e5+5);
+        int n=arr.size(),ans=1;
+        for(auto &x:arr)
         {
-            if(abs(arr[i]-arr[i-1])<=1)
-            {
-                continue;
-            }
-            else
-            {
-                arr[i]=arr[i-1]+1;
-            }
+            freq[min(x,n)]++;
         }
-        return arr[arr.size()-1];
+        for(int i=2;i<=n;i++)
+        {
+            ans=min(ans+freq[i],i);
+        }
+        for(int i=0;i<=n;i++)
+        {
+            freq[i]=0;
+        }
+        return ans;
     }
 };
