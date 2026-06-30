@@ -1,18 +1,14 @@
 class Solution {
 public:
-    int numberOfSubstrings(string s) {
-        int c=0,l=0;
-        unordered_map<char,int> m={{'a',0},{'b',0},{'c',0}};
-        for(int i=0;i<s.length();i++) 
+    int numberOfSubstrings(string s)
+    {
+        int ans=0;
+        vector<int> p={-1,-1,-1};
+        for(int i=0;i<s.length();i++)
         {
-            m[s[i]]++;
-            while(m['a']>0 && m['b']>0 && m['c']>0) 
-            {
-                c+=s.length()-i;
-                m[s[l]]--;
-                l++;
-            }
+            p[(s[i]&31)-1]=i;
+            ans+=min({p[0],p[1],p[2]})+1;
         }
-        return c;
+        return ans;
     }
 };
