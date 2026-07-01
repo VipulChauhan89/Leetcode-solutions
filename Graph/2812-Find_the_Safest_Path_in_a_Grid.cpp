@@ -33,7 +33,7 @@ public:
         }
         priority_queue<pair<int,pair<int,int>>> nq;
         nq.push({dis[0][0],{0,0}});
-        vector<vector<int>> vis(n,vector<int>(n,0));
+        vector<vector<int>> visited(n,vector<int>(n,0));
         int mx=0;
         while(!nq.empty())
         {
@@ -46,10 +46,10 @@ public:
             for(auto dir:dirs)
             {
                 int ni=i+dir[0],nj=j+dir[1];
-                if(ni>=0 && ni<n && nj>=0 && nj<n && !vis[ni][nj])
+                if(ni>=0 && ni<n && nj>=0 && nj<n && !visited[ni][nj])
                 {
                     nq.push({min(safe,dis[ni][nj]),{ni,nj}});
-                    vis[ni][nj]=1;
+                    visited[ni][nj]=1;
                 }
             }
         }
