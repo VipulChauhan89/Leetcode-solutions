@@ -1,31 +1,23 @@
 class Solution {
 public:
-
-    int minScore(int n, vector<vector<int>>& roads) 
+    int minScore(int n,vector<vector<int>> &roads)
     {
-        vector<vector<int>> adj[n+1];
-        for(auto a:roads)
+        vector<int> root(n+1);
+        iota(root.begin(),root.end(),0);
+        auto find=[&](this auto &self,int i)->int
         {
-            adj[a[0]].push_back({a[1],a[2]});
-            adj[a[1]].push_back({a[0],a[2]});
+            return root[i]==i?i:root[i]=self(root[i]);
+        };
+        for(auto &r:roads)
+        {
+            root[find(r[0])]=find(r[1]);
         }
-        vector<int> visited(n+1,0);
-        queue<vector<int>> pq;
-        int ans=1e8;
-        visited[1]=1;
-        pq.push({1,100000});
-        while(!pq.empty())
+        int ans=10001;
+        for(auto &r:roads)
         {
-            int ct=pq.front()[0];
-            pq.pop();
-            for(auto a:adj[ct])
+            if(find(r[0])==find(1))
             {
-                ans=min(ans,a[1]);
-                if(!visited[a[0]])
-                {
-                    visited[a[0]]=1;
-                    pq.push({a[0],a[1]});
-                }
+                ans=min(ans,r[2]);
             }
         }
         return ans;
