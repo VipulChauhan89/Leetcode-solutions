@@ -1,14 +1,14 @@
 class Solution {
 public:
-    void dfs(int node,int cmp,vector<set<int>> &G,vector<int> &visited, unordered_map<int,vector<int>> &mp) 
+    void dfs(int node,int cmp,vector<set<int>> &G,vector<int> &visited, unordered_map<int,vector<int>> &m) 
     {
         visited[node]=1;
-        mp[cmp].push_back(node);
+        m[cmp].push_back(node);
         for(auto &i:G[node]) 
         {
             if(!visited[i]) 
             {
-                dfs(i,cmp,G,visited,mp);
+                dfs(i,cmp,G,visited,m);
             }
         }
     }
@@ -16,7 +16,7 @@ public:
     {
         vector<set<int>> G(n);
         vector<int> visited(n,0);
-        unordered_map<int,vector<int>> mp;
+        unordered_map<int,vector<int>> m;
         int component=1,ans=0;
         for(auto &i:edges) 
         {
@@ -27,10 +27,10 @@ public:
         {
             if(!visited[i]) 
             {
-                dfs(i,component++,G,visited,mp);
+                dfs(i,component++,G,visited,m);
             }
         }
-        for(auto &[cmp,vec]:mp) 
+        for(auto &[cmp,vec]:m) 
         {
             bool isComplete=true;
             for(int i=0;i<vec.size();i++) 
