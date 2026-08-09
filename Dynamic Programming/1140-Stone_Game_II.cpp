@@ -1,28 +1,36 @@
 class Solution {
 public:
-    int stoneGameII(vector<int> &piles) 
+    int n;
+    vector<int> suffix;
+    vector<vector<int>> dp;
+    int solve(int i,int M)
     {
-        int n=piles.size();
-        vector<vector<int>> dp(n+1,vector<int>(n+1,0));
-        vector<int> sum(n+1,0);
+        if(i==n)
+        {
+            return 0;
+        }
+        if(dp[i][M]!=-1)
+        {
+            return dp[i][M];
+        }
+        int best=0;
+        for(int X=1;X<=2*M && i+X<=n;X++)
+        {
+            int nextM=max(M,X);
+            int current=suffix[i]-solve(i+X,nextM);
+            best=max(best,current);
+        }
+        return dp[i][M]=best;
+    }
+    int stoneGameII(vector<int> &piles)
+    {
+        n=piles.size();
+        suffix.assign(n+1,0);
         for(int i=n-1;i>=0;i--)
         {
-            sum[i]=sum[i+1]+piles[i];
+            suffix[i]=suffix[i+1]+piles[i];
         }
-        for(int i=0;i<=n;i++)
-        {
-            dp[i][n]=sum[i];
-        }
-        for(int i=n-1;i>=0;i--)
-        {
-            for(int j=n-1;j>=1;j--)
-            {
-                for(int k=1;k<=2*j && i+k<=n;k++)
-                {
-                    dp[i][j]=max(dp[i][j],sum[i]-dp[i+k][max(j,k)]);
-                }
-            }
-        }
-        return dp[0][1];
+        dp.assign(n,vector<int>(n+1,-1));
+        return solve(0,1);
     }
 };
